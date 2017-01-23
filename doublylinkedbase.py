@@ -1,4 +1,4 @@
-class DoublyLinkedBase:
+class _DoublyLinkedBase:
     """
     A base class providing a doubly linked list representation.
     """
@@ -60,5 +60,5 @@ class DoublyLinkedBase:
         return element                  # return deleted element
 
 if __name__ == '__main__':
-    dl = DoublyLinkedBase()
+    dl = _DoublyLinkedBase()
     print('the len: ', len(dl))
