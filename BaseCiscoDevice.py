@@ -6,6 +6,7 @@ class BaseCiscoDevice:
     """
     This will be used as a base class for Cisco devices (switches, routers and maybe firewalls...).
     """
+    ###     start nested interface class      ###
     
     # this is a simple nested class to abstractly define an interface:
     class Interface:
@@ -19,13 +20,66 @@ class BaseCiscoDevice:
             """
             self.name = name
 
+		def set_interface_attributes("""OUTPUT OF: 'show run | section interface'"""):
+        	### start copy and paste    ###
+			for line in ssh.send_config_command(['show run | section interface']):
+				# interface [Gi|Fa|Vlan...]
+				if line.startswith('interface'):
+				    self.name = line.split()[-1]
+				
+					# description
+				    if line.startswith('description'):
+				        self.description = str(line.split()[1:])
+				
+					# shutdown
+				    if line.lstrip()startswith('shutdown'):
+				        self.shutdown = True
+				
+					# port-type nni
+				    if line.lstrip().startswith('port-type'):
+				        line.split()[1]
+				
+					# switchport mode [trunk|access]
+				    if line.lstrip().startswith('switchport'):
+				
+				        		# switchport trunk
+						        if 'trunk' in line.split()[1]:
+				
+				            # switchport trunk native vlan <vlan>
+				            if 'native' in line.split()[2]:
+				
+				                # switchport trunk native vlan
+				                self.native_vlan = line.split()[-1]
+				
+				            # switchport trunk allowed vlan
+				            if 'allowed' in line.split()[2]:
+				                # return a list of vlans
+				                # this could be problematic if a vlan range is used. (EG: 100-200... TODO)
+				                self.vlans_allowed = line.split()[4].split(',')
+				
+				        # switchport access <vlan>
+				        if 'access' in line.split()[1]:
+				            self.vlan = line.split()[-1]
+				
+				        # switchport mode [trunk|vlan]
+				        if 'mode' in line.split()[1]:
+				            self.mode = line.split()[2]
+				
+				# rep segment
+				    if line.lstrip().startswith('rep'):
+				        if 'segment' in line.split()[1]:
+				            self.rep_segment = line.split()[-1]
+				
+				
+    ###     end nested interface class      ###
+
     def __init__(self, name, params):
         """
         Create an CiscoDevice instance.
         """
         self.name = name
         self._params = params
-
+    
     def cdp_neighbours(self, args):
         """
         Returns a {linked?} list of CDP neighbours.
