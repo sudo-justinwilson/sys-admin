@@ -1,3 +1,5 @@
+from linkedlists import Empty
+
 class _DoublyLinkedBase:
     """
     A base class providing a doubly linked list representation.
@@ -59,6 +61,77 @@ class _DoublyLinkedBase:
         node._prev = node._next = node._element = None      # deprecate node
         return element                  # return deleted element
 
+###         ---     SUB-CLASS   ###         ---     
+###         ---     SUB-CLASS   ###         ---     
+
+class LinkedDeque(_DoublyLinkedBase):
+    """
+    Double-ended queue implementation based on a doubly linked list.
+    """
+
+    def first(self):
+        """
+        Return, but do not remove, the element at the front of the dequeue.
+        """
+        if self.is_empty():
+            raise Empty("Deque is empty")
+        return self._header._next._element
+
+    def last(self):
+        """
+        Return, but do not remove, the element at the back of the dequeue.
+        """
+        if self.is_empty():
+            raise Empty("Deque is empty")
+        return self._trailer._prev._element
+
+    def insert_first(self, e):
+        """
+        Add an element to the front of the deque.
+        """
+        self._insert_between(e, self._header, self._header._next)
+
+    def insert_last(self, e):
+        """
+        Add an element to the back of the deque.
+        """
+        self._insert_between(e, self._trailer._prev, self._trailer)
+
+    def delete_first(self):
+        """
+        Remove and return the element from the front of the deque.
+
+        Else raise exception.
+        """
+        if self.is_empty():
+            raise Empty("Deque is empty")
+        return self._delete_node(self._header._next)    # uses inherited method
+
+    def delete_last(self):
+        """
+        Remove and return the element from the back of the deque.
+
+        else raise exception.
+        """
+        if self.is_empty():
+            raise Empty("Deque is empty")
+        return self._delete_node(self._trailer._prev)
+
+
+
 if __name__ == '__main__':
-    dl = _DoublyLinkedBase()
-    print('the len: ', len(dl))
+    ld = LinkedDeque()
+    print('the len: ', len(ld))
+    ld.insert_first('insert first')
+    print('the len: ', len(ld))
+    print('first = ', ld.first())
+    ld.insert_last('insert last')
+    print('the len: ', len(ld))
+    print('last = ', ld.last())
+    ld.delete_first()
+    print('the len after delete_first: ', len(ld))
+    print('first = ', ld.first())
+    ld.delete_last()
+    print('the len after delete_last: ', len(ld))
+    print('last = ', ld.last())
+    print('the len: ', len(ld))
