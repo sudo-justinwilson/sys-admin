@@ -74,8 +74,20 @@ class ParseZenDump:
         template = jinja2.Template(hosts_template)
         return template.render(devices = dd.iteritems())
 
+    def parse_to_ansible_hosts(self):
+        """
+        Parse a device_dict to Ansible inventory format.
+        """
+        dd = self.device_dict()
+        ansible_template = """{% for device in devices %}
+[{{ device[0] }}]
+{{ device[0] }} ansible_host={{ device[1] }}
+{% endfor %}"""
+        template = jinja2.Template(ansible_template)
+        return template.render(devices=dd.iteritems())
+
 if __name__ == '__main__':
-    f = '../zenbatchdump_2017-01-17.csv'
+    f = '../scrapbook/zenbatchdump_2017-01-17.csv'
     parser = ParseZenDump(f)
     #dl = parser.parse_zendump()
     #for item in dl:
@@ -84,5 +96,5 @@ if __name__ == '__main__':
     #dd = parser.device_dict()
     #for item in dd.viewitems():
     #    print(item)
-    hosts = parser.parse_to_etc_hosts()
+    hosts = parser.parse_to_ansible_hosts()
     print(hosts)
