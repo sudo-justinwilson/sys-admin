@@ -1,4 +1,5 @@
 import jinja2
+import argparse
 
 class ParseZenDump:
     """
@@ -13,13 +14,29 @@ class ParseZenDump:
             self.title = title
             self.ip = ip
 
-    def __init__(self, path_to_zendump):
+    def __init__(self):
         """
         Create a ParseZenDump instance.
 
         path_to_zendump =  a string which is the path to the zendump csv file
         """
-        self.file = path_to_zendump
+	parser = argparse.ArgumentParser()
+	parser.add_argument("file", help="the path to the zendump file.")
+	parser.add_argument("--hosts", help="parse it to /etc/hosts format.", action="store_true")
+	parser.add_argument("--ansible", help="parse it to /etc/ansible/hosts format.", action="store_true")
+
+	args = parser.parse_args()
+
+	self.file = args.file
+	if args.hosts:
+		self.hosts = True
+	else:
+		self.hosts = False
+
+	if args.ansible:
+		self.ansible = True
+	else:
+		self.ansible = False
 
 
     def parse_zendump(self, zendump_file=None):
@@ -87,14 +104,8 @@ class ParseZenDump:
         return template.render(devices=dd.iteritems())
 
 if __name__ == '__main__':
-    f = '../zenbatchdump_2017-01-17.csv'
-    parser = ParseZenDump(f)
-    #dl = parser.parse_zendump()
-    #for item in dl:
-    #    print item
-    #print [item.title for item in dl]
-    #dd = parser.device_dict()
-    #for item in dd.viewitems():
-    #    print(item)
-    hosts = parser.parse_to_etc_hosts()
-    print(hosts)
+	test = ParseZenDump()
+	if test.hosts:
+		print test.parse_to_etc_hosts()
+	if test.ansible:
+		print test.parse_to_ansible_hosts()
