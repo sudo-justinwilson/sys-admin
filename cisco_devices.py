@@ -26,9 +26,16 @@ class BaseCiscoDevice:
         """
         pass
 
+    def _get_running_config(self):
+        """
+        This method has to be over-ridden by subclasses.
+        """
+        raise Exception('self.get_running_config has to be over-ridden!')
+    
 
 
-class CiscoSwitch(BaseCiscoDevice):
+
+class BaseCiscoSwitch(BaseCiscoDevice):
     """
     This will be used as a base class for Cisco switches.
     """
@@ -39,24 +46,84 @@ class CiscoSwitch(BaseCiscoDevice):
         """
         Abstract an interface. Override base class definition.
         """
-        __slots__ = 'name','vlan'
-        def __init__(self, name):
+        __slots__ = 'name','mode'
+        def __init__(self, name, mode):
             """
             This will create a simple interface.
             """
             self.name = name
-            self.vlan = vlan
+            # access port or trunk?
+            self.mode = mode
         
             			
     ###     end nested interface class      ###
 
-    def __init__(self, name, params):
+    def __init__(self, ip_address, username, password=None, port=22):
         """
-        Create an CiscoDevice instance.
+        Create a CiscoDevice instance.
         """
-        self.name = name
-        self._params = params
-    
+        self.ip_address = ip_address
+        self.username = username
+        if password is not None:
+            self.password = password
+        self.port = port
+
+class CiscoSwitchNetmiko(BaseCiscoSwitch):
+    """
+    Class that describes a Cisco IOS switch using netmiko to communicate with the switch.
+    """
+
+    def ssh_connection(self):
+        """
+        Establish an SSH connection using netmiko.
+        """
+        try:
+            this_device = {
+                'device_type' : 'cisco_ios',
+                'ip' : self.ip_address,
+                'username' : self.username,
+                'password' : self.password,
+                'port' : self.port,
+                }
+            connection = ConnectionHandler(**this_device)
+            return connection
+        except KeyError as e:
+            print('The value "', e, '" has not been defined.')
+
+    # up to here
+    # I think "exec_command" is a waste of time...
+    def exec_command(self, command, expect=None):
+        """
+        Send a show command and return the output.
+
+        Mandatory args:
+        command:
+            the command to send to privileged exec mode
+        
+        Optional args:
+        expect:
+            expect string
+        """
+        try:
+            ssh_session = self.ssh_connection()
+        except Exception as e:
+            print('Could not connect to host because of the following error:')
+            print(e)
+        if expect_string:
+            output = ssh_session.send_command(command, expect_string=expect)
+        else:
+            output = ssh_session.send_command(command)
+        return output
+
+    def _get_running_config(self)
+        """
+        Return running-config from switch.
+        """
+        ssh = self.ssh_connection()
+        output = ssh.send_command('show run')
+        return output
+
+
     def cdp_neighbours(self, args):
         """
         Returns a {linked?} list of CDP neighbours.
