@@ -1,0 +1,10 @@
+---
+- hosts: cisco
+  gather_facts: no
+  vars:
+    remote_user: justin
+  tasks:
+    - raw: show ip int br
+      register: result
+    - debug: var=result
+  

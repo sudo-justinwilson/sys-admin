@@ -1,0 +1,23 @@
+---
+- hosts: nme
+  gather_facts: yes
+  connection: local
+  vars: 
+    cli:
+      host: 192.168.0.241
+      username: justin
+      password: cisco
+      transport: cli
+    remote_user: justin
+  tasks:
+  - name: test out ios_facts
+    ios_facts:
+      gather_subset:
+        - config
+      provider: "{{ cli }}"
+
+  - name: test out the ios_config module
+    ios_config:
+      lines:
+        - username ansible password cisco
+      provider: "{{ cli }}"

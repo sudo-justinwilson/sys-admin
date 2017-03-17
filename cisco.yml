@@ -1,0 +1,17 @@
+---
+- hosts: nme
+  vars: 
+    cli:
+      host: nme
+      username: justin
+      password: cisco
+      transport: cli
+    remote_user: justin
+  tasks:
+  - name: test out the ios_config module
+    ios_config:
+      lines:
+        - description test interface
+        - ip address 8.8.8.8 255.255.255.255
+      parents: interface lo10
+      provider: "{{ cli }}"
