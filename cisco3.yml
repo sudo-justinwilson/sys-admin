@@ -1,0 +1,15 @@
+---
+- hosts: nme
+  gather_facts: False
+  vars: 
+    cli:
+      host: nme
+      username: justin
+      password: cisco
+      transport: cli
+  tasks:
+  - name: test out the ios_config module
+    ios_config:
+      lines:
+        - access-list 180 permit tcp any any eq www
+      provider: "{{ cli }}"

@@ -1,0 +1,12 @@
+---
+- hosts: nme
+  vars: 
+    cli:
+      host: nme
+      username: justin
+      password: cisco
+      transport: cli
+  tasks:
+  - name: Create an access-list
+    ios_config:
+    lines: access-list 180 permit tcp any any eq www

@@ -1,0 +1,10 @@
+---
+- hosts: nme
+  - name: Configure device
+    ios_config:
+      host: nme
+      username: justin
+      password: cisco
+  - name: Create an access-list
+  ios_config:
+    lines: access-list 180 permit tcp any any eq www

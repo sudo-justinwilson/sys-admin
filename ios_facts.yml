@@ -1,0 +1,15 @@
+---
+- hosts: nme
+  gather_facts: no
+  connection: local
+  vars:
+    cli:
+      host: "{{ inventory_hostname }}"
+      username: justin
+      password: cisco
+      transport: cli
+    remote_user: justin
+  tasks:
+  - name: test out ios_facts module
+    ios_facts:
+      provider: "{{ cli }}"
