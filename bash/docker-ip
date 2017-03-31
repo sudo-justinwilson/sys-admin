@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# script to get container IP:
+
+exec docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$@"

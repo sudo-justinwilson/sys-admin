@@ -1,0 +1,6 @@
+#!/bin/bash
+
+vm=$1
+
+# start a vm in headless mode:
+/usr/bin/vboxmanage startvm $vm --type headless
