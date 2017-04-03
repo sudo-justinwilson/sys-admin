@@ -5,5 +5,5 @@ snap=$2
 name=$3
 
 # start a vm in headless mode:
-/usr/bin/vboxmanage clonevm $vm --snapshot $snap --options link --name=${name}
+/usr/bin/vboxmanage clonevm $vm --snapshot $snap --options link --name $name --register
 #echo /usr/bin/vboxmanage clonevm $vm --snapshot $snap --options link --name $name
