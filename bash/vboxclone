@@ -1,0 +1,9 @@
+#!/bin/bash
+
+vm=$1
+snap=$2
+name=$3
+
+# start a vm in headless mode:
+/usr/bin/vboxmanage clonevm $vm --snapshot $snap --options link --name=${name}
+#echo /usr/bin/vboxmanage clonevm $vm --snapshot $snap --options link --name $name
