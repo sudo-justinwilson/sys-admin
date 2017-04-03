@@ -1,20 +1,27 @@
 #!/bin/bash
 
 vm=$1
-name=$2
+name=`echo $2`
 #description=$3
+argc=$#
+#ARGS=$3
 
-# if $description is set, use it, else don't:
-#if [[ -z $description ]]; then
-#	/usr/bin/vboxmanage snapshot $vm take $name; 
-#else
-#	/usr/bin/vboxmanage snapshot $vm take $name --description $description;
-#fi
+#arg=$3
+#while [[ ${argc} > 2 ]]; do 
+#	echo $arg;
+#	shift;
+#	arg="${arg} $3";
+#	argc=$(( argc - 1 ));
+#done
 
-# if $description is set, use it, else don't:
-#if [[ -z $description ]]; then
-#	echo "there is no arg. the only args are: $vm & $name"
-#else
-#	echo "there IS an arg, and the arg is vm: $vm; name: $name; desc: $description"
-#fi
-/usr/bin/VBoxManage snapshot $vm take $name
+
+arg=$3
+while [[ ${argc} > 2 ]]; do 
+	shift;
+	arg="${arg} $3";
+	argc=$(( argc - 1 ));
+done
+
+# $ARGS MUST BE ENCLOSED IN " " WHEN PASSED:
+/usr/bin/VBoxManage snapshot $vm take $name  $arg
+#echo /usr/bin/VBoxManage snapshot $vm take $name  $arg
