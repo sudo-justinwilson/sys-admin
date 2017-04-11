@@ -1,0 +1,20 @@
+#!/bin/bash
+
+vm=$1
+snapshot=$2
+#description=$3
+
+# if $description is set, use it, else don't:
+#if [[ -z $description ]]; then
+#	/usr/bin/vboxmanage snapshot $vm take $name; 
+#else
+#	/usr/bin/vboxmanage snapshot $vm take $name --description $description;
+#fi
+
+# if $description is set, use it, else don't:
+#if [[ -z $description ]]; then
+#	echo "there is no arg. the only args are: $vm & $name"
+#else
+#	echo "there IS an arg, and the arg is vm: $vm; name: $name; desc: $description"
+#fi
+/usr/bin/VBoxManage snapshot $vm delete $snapshot

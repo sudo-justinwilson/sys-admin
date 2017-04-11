@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# script to get docker pid:
+
+exec docker inspect --format '{{ .State.Pid }}' "$@"

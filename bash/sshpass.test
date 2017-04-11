@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SSHPASS=jw322586 
+ssh-agent bash
+sshpass -e ssh-add
+sshstrathfield ls > /home/justin/sshpasss.test

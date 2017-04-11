@@ -1,0 +1,4 @@
+# This is the command to mount an MTP device using go-mtpfs.
+# It should be aliased in your ~/.bashrc:
+# Note that it requires the mountpoint as $1:
+sudo go-mtpfs -debug mtp,usb,data,fuse 

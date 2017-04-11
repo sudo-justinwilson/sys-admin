@@ -1,0 +1,27 @@
+#!/bin/bash
+
+vm=$1
+name=`echo $2`
+#description=$3
+argc=$#
+#ARGS=$3
+
+#arg=$3
+#while [[ ${argc} > 2 ]]; do 
+#	echo $arg;
+#	shift;
+#	arg="${arg} $3";
+#	argc=$(( argc - 1 ));
+#done
+
+
+arg=$3
+while [[ ${argc} > 2 ]]; do 
+	shift;
+	arg="${arg} $3";
+	argc=$(( argc - 1 ));
+done
+
+# $ARGS MUST BE ENCLOSED IN " " WHEN PASSED:
+/usr/bin/VBoxManage snapshot $vm take $name  $arg
+#echo /usr/bin/VBoxManage snapshot $vm take $name  $arg
