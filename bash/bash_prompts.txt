@@ -1,0 +1,6 @@
+# Here are my personalized bash prompts:
+
+# centos7-study:
+export PS1="\d - \A <=== {{{\u@\h \W}}}\\$ \! ===>
+INPUT==>> "
+
