@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# author: Justin Wilson
+
+### This is a script to rollback RHCE VMs to a base, fresh install.
+##if [[ $1 == "-h" ]]; then
+##    echo "restore-vms";
+##    echo "DESCRIPTION: restore RHCE VMs to base state.";
+##    echo "";
+##    echo "ARGS:";
+##    echo "-h :          print this help"
+##    echo "--nopower :   The VMs are powered on, after restoring the snap, by default. This argument does NOT power-on the VMs.";
+##    return 0;
+##fi
+##
+##RHCE1='64715081-fb94-4e40-a69a-2af21cf63324'
+##RHCE1_SNAP='d75a39b8-cc12-484f-a28e-b05dee00407f'
+##RHCE2='9b78187f-1125-412b-9564-471298bbe311' 
+##RHCE2_SNAP='5d71f9a8-9d8c-4dde-b9d6-cb9addc3c903'
+##RHCE3='5e7c1fec-b009-4c8a-831b-fcb8ec5daa38' 
+##RHCE3_SNAP='768b4682-516f-4a7b-8f17-2bc37f5e14c7'
+##
+##echo $1
+##
+##for vm in $RHCE1 $RHCE2 $RHCE3; do
+##    echo "The current vm is: ${vm}";
+##    if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+##        echo "Switching $vm off..";
+##        vboxmanage controlvm ${vm} poweroff;
+##    else
+##        echo "$vm is not  running";
+##    fi;
+##done
+##
+##/home/justin/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+##/home/justin/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+##/home/justin/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+##
+### optional arg to poweron VMs:
+##if [[ $1 == "--nopower" ]]; then
+##    echo "NOT POWERING ON VMs!";
+##else
+##    for vm in $RHCE1 $RHCE2 $RHCE3; do
+##        /home/justin/bin/vboxstart $vm;
+##        echo "Powering on $vm";
+##    done;
+##fi
+
+### START CASE 
+
+# Define VMs and snaps:
+RHCE1='64715081-fb94-4e40-a69a-2af21cf63324'
+RHCE1_SNAP='d75a39b8-cc12-484f-a28e-b05dee00407f'
+RHCE2='9b78187f-1125-412b-9564-471298bbe311' 
+RHCE2_SNAP='5d71f9a8-9d8c-4dde-b9d6-cb9addc3c903'
+RHCE3='5e7c1fec-b009-4c8a-831b-fcb8ec5daa38' 
+RHCE3_SNAP='768b4682-516f-4a7b-8f17-2bc37f5e14c7'
+
+case "$1" in
+
+    "-h")
+        echo "restore-vms";
+        echo "DESCRIPTION: restore RHCE VMs to base state.";
+        echo "";
+        echo "ARGS:";
+        echo "-h :          print this help"
+        echo "--nopower :   The VMs are powered on, after restoring the snap, by default. This argument does NOT power-on the VMs.";
+        ;;
+
+    "--nopower")
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            echo "The current vm is: ${vm}";
+            if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+                echo "Switching $vm off..";
+                vboxmanage controlvm ${vm} poweroff;
+            else
+                echo "$vm is not  running";
+            fi;
+        # Restore VM snapshots:
+        /home/justin/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+        /home/justin/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+        /home/justin/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+        echo "NOT POWERING ON VMs!";
+        done
+        ;;
+
+    *)
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            echo "The current vm is: ${vm}";
+            if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+                echo "Switching $vm off..";
+                vboxmanage controlvm ${vm} poweroff;
+            else
+                echo "$vm is not  running";
+            fi;
+        done
+        # Restore VM snapshots:
+        /home/justin/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+        /home/justin/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+        /home/justin/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+        echo "POWERING ON VMs!";
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            /home/justin/bin/vboxstart $vm;
+            echo "Powering on $vm";
+        done;
+esac
